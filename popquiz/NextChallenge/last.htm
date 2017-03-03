@@ -1,0 +1,18 @@
+<html>
+<body bgcolor="#E4E4E4">
+<font face="tahoma">
+<br>Evaluate yourself on how you did...<br><br>Results:-<p>
+<script language="JavaScript">
+	document.write("<table bgcolor='#000000' border='0' bordercolor='#000000' frame='box' rules='all' cellpadding='2' bgcolor='#000000'><tr bgcolor='#E4E4E4'><th colspan='2'>Question</th><th>Score</th><th>Correct Answer</th></tr>");
+	for (i=1;i<=parent.Scores.maxq;i++) {
+		document.write("<tr bgcolor='#E4E4E4'><td width='30'>"+i+"</td>");
+		document.write("<td>"+parent.Scores.question[i][0]+"</td>");
+		document.write("<td>"+parent.Scores.results[i]+"</td>");
+		document.write("<td>"+parent.Scores.question[i][parent.Scores.question[i][5]]+"</td></tr>");
+	}
+	document.write("</table>");
+</script>
+</font>
+</body>
+</html>
+

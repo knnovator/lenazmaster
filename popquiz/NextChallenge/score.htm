@@ -1,0 +1,100 @@
+<html>
+<head>
+<script language="JavaScript">
+	var currentq = 1; 
+ 	var score = 0;
+ 	var totalq = 0;	
+ 	var revise = 0;
+ 	var quizname="the Quiz";
+ 	var results = new Array();
+ 	var question= new Array();
+</script>
+
+<script src="mcqquestions.js"></script> 
+ 
+<script language="JavaScript">
+	// modified to leave index 0 out of shuffle
+	function fisherYates ( myArray ) {
+    	var i = myArray.length;
+    	if ( i == 0 ) return false;
+    	while ( --i>0 ) {
+       		var j = 1+Math.floor( Math.random() * ( i ) );
+       		var tempi = myArray[i];
+       		var tempj = myArray[j];
+       		myArray[i] = tempj;
+       		myArray[j] = tempi;
+     	}
+	}
+
+ 	var maxq = question.length-1;
+ 	var shuffled = new Array(maxq);
+  	for (i=1;i<=maxq;i++) shuffled[i]=i;
+ 
+ 	function feedbackmsg(msg){
+  		parent.Feedback.document.open();
+  		parent.Feedback.document.write("<body background='../../Backgrounds/gray/gray19a.jpg'>" + msg + "</body>");
+  		parent.Feedback.document.close();
+ 	}
+ 
+ 	function mark(optionno) {
+  		score = score + optionno;
+  		totalq++;		
+  		results[shuffled[currentq]]=optionno; // keep results
+  		feedbackmsg("<font face='tahoma'color='white'>You have scored "+score+" correct out of 10 ---> [ "+parseInt((score/10)*100)+"% ].</font>");
+  		currentq++;;
+  		if (revise == 1) {while (results[shuffled[currentq]]==1) currentq++;
+		feedbackmsg("<font face='tahoma'color='white'>You have now correctly answered "+score+" of these.</font>");}
+  		if (currentq>maxq) {parent.Questions.location.href="last.htm";}
+  		else {updateQuestion(currentq);}
+ 	}
+	 
+ 	function updateQuestion(qno){
+  		aqno=shuffled[qno];
+  		var a = new Array(0,0,0,0,0);
+  		a[question[aqno][5]]=1;
+  		var o = "";
+  		o += "<html><body bgcolor='#E4E4E4'><font face='tahoma' size='3'>";
+		o += "<center><table width='300' height='50'><tr><td></td></tr></table></center>";
+		
+		o += "<center><iframe src='NoticeBoard.swf' style='width: 647px; height: 339px' quality='high' allowscriptaccess='always' pluginspage='http://www.macromedia.com/go/getflashplayer' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0'></iframe></center>";
+		o += "<center><hr width='647' size='1' color='#000000'/><input type='button' value='<< Go Back <<' onclick='history.back(-1)' /></center>";		
+  		o += "</font></body></html>";
+  		parent.Questions.document.open();
+  		parent.Questions.document.write(o);
+  		parent.Questions.document.close();
+ 	}  
+ 
+ 	function revision() {
+  		revise=1; currentq=1;score=0;totalq=0;
+  		while (results[shuffled[currentq]]==1) currentq++;
+  		if (currentq<=maxq) {
+   			updateQuestion(currentq);
+   			feedbackmsg("<font face='tahoma' color='white'>Now going over questions you didn't answer correctly...</font>");
+  		} else alert("No more wrong answers!");
+ 	}
+ 
+ 	function startshuffled() {
+  		revise=0; currentq=1;score=0;totalq=0;
+  		for (i=1;i<=maxq;i++) results[i]=0;
+  		fisherYates (shuffled);
+  		feedbackmsg("<font face='tahoma' color='white'>Take a moment to answer this " + quizname + " [random order]</font>");
+  		updateQuestion(currentq);
+ 	}
+</script>
+</head>
+
+<body background='../../Backgrounds/gray/gray19a.jpg'>
+<form>
+	<input type="Button" name="StartAgain" value="Restart in order" onClick="parent.location.href='../index.html'" notab>
+ 	<input type="Button" name="StartShuffle" value="Restart in random order" onClick="startshuffled()" notab>
+ 	<input type="Button" name="Revision" value="Re-do Incorrect ones" onClick="revision()" notab>
+ 	<input type="Button" name="Skip" value="Skip to answers" onClick="parent.Questions.location.href='../last.htm'" notab>
+	<input type="Button" name="NewChallenge" value="Go to the Next Challenge" onClick="parent.location.href='NextChallenge/NextChallenge.html'" notab> <button onClick="parent.window.close()">Quit!</button>
+</form>
+<script language="JavaScript">
+  	feedbackmsg("<font face='tahoma' color='white'>Take a moment to answer this "  + quizname + " [normal order]</font>");
+  	updateQuestion(currentq);
+</script>
+
+</body>
+</html>
